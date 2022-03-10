@@ -7,19 +7,21 @@
 
 import tweepy, yaml, random, os
 
+errors = 'ignore'
+
 # Get environment variables (stored encrypted in github repository, and called into the OS from the action workflow file main.yml)
-CONSUMER_KEY = os.environ.get('CONSUMER_KEY')
-CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET')
-ACCESS_KEY = os.environ.get('ACCESS_KEY')
-ACCESS_SECRET = os.environ.get('ACCESS_SECRET')
+CONSUMER_KEY = 'CONSUMER KEY'
+CONSUMER_SECRET = 'CONSUMER SECRET'
+ACCESS_KEY = 'ACCESS KEY'
+ACCESS_SECRET = 'ACCESS SECRET'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-sourceLabel = 'MBR Quotes'
+sourceLabel = 'quotes'
 
-with open('quotes.yaml','r') as file:
+with open('quotes.yaml','r', encoding = 'utf8') as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     quotes = yaml.load(file, Loader=yaml.FullLoader)
@@ -28,9 +30,13 @@ with open('quotes.yaml','r') as file:
     api.update_status(status=item, source=sourceLabel)
     file.close()
 
-with open('quotes.yaml') as og, open("tmp", "w") as dest:
+with open('quotes.yaml', encoding = 'utf-8') as og, open("tmp", "w") as dest:
     for line in og:
         decoded_string = bytes(line, "utf-8").decode("unicode_escape") 
         if item not in decoded_string:
             dest.write(line)
-os.rename("tmp", "quotes.yaml")
+
+    © 2022 GitHub, Inc.
+
+    Terms
+    Privacy
